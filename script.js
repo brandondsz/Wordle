@@ -63,34 +63,33 @@ function colorCells(isCorrect) {
     }
 }
 
-hiddenInput.addEventListener('keydown', (e) => {
+// Handle input from the hidden input field
+hiddenInput.addEventListener('input', (e) => {
     if (gameOver) return;
 
-    const key = e.key.toUpperCase();
-    const currentRow = boardState[currentAttempt];
+    const input = e.target.value.toUpperCase().slice(0, WORD_LENGTH);
+    hiddenInput.value = input; // Limit input to 5 characters
+    boardState[currentAttempt] = input.split('');
+    updateBoard();
+});
 
-    if (/^[A-Z]$/.test(key) && currentRow.join('').length < WORD_LENGTH) {
-        // Add the letter to the current row
-        const emptyIndex = currentRow.indexOf('');
-        if (emptyIndex !== -1) {
-            currentRow[emptyIndex] = key;
-            updateBoard();
-        }
-    } else if (e.key === 'Backspace') {
+// Handle Backspace and Enter keys
+hiddenInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace') {
         // Handle backspace
-        const lastIndex = currentRow.indexOf('');
+        const currentRow = boardState[currentAttempt];
+        const lastIndex = currentRow.lastIndexOf('');
         if (lastIndex === -1 || lastIndex === WORD_LENGTH) {
             currentRow[WORD_LENGTH - 1] = '';
         } else if (lastIndex > 0) {
             currentRow[lastIndex - 1] = '';
         }
         updateBoard();
-    } else if (e.key === 'Enter' && currentRow.join('').length === WORD_LENGTH) {
+    } else if (e.key === 'Enter' && boardState[currentAttempt].join('').length === WORD_LENGTH) {
         // Handle Enter key
         checkGuess();
         hiddenInput.value = '';
     }
-    currentInput.textContent = e.key;
 });
 
 // Focus on the hidden input when the board is clicked
