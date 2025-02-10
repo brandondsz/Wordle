@@ -62,19 +62,30 @@ function colorCells(isCorrect) {
     }
 }
 
-
-// Handle input from the hidden input field
-hiddenInput.addEventListener('input', (e) => {
-    if (gameOver) return;
-    const input = e.target.value.toUpperCase().slice(0, WORD_LENGTH);
-    hiddenInput.value = input; // Limit input to 5 characters
-    boardState[currentAttempt] = input.split('');
-    updateBoard();
-});
-
-// Handle Enter key for submission
 hiddenInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && hiddenInput.value.length === WORD_LENGTH) {
+    if (gameOver) return;
+
+    const key = e.key.toUpperCase();
+    const currentRow = boardState[currentAttempt];
+
+    if (/^[A-Z]$/.test(key) && currentRow.join('').length < WORD_LENGTH) {
+        // Add the letter to the current row
+        const emptyIndex = currentRow.indexOf('');
+        if (emptyIndex !== -1) {
+            currentRow[emptyIndex] = key;
+            updateBoard();
+        }
+    } else if (e.key === 'Backspace') {
+        // Handle backspace
+        const lastIndex = currentRow.indexOf('');
+        if (lastIndex === -1 || lastIndex === WORD_LENGTH) {
+            currentRow[WORD_LENGTH - 1] = '';
+        } else if (lastIndex > 0) {
+            currentRow[lastIndex - 1] = '';
+        }
+        updateBoard();
+    } else if (e.key === 'Enter' && currentRow.join('').length === WORD_LENGTH) {
+        // Handle Enter key
         checkGuess();
         hiddenInput.value = '';
     }
