@@ -71,7 +71,7 @@ keyboard.addEventListener('click', (e) => {
 
     if (key === 'Backspace') {
         // Handle backspace
-        const lastIndex = currentRow.lastIndexOf('');
+        const lastIndex = currentRow.indexOf('');
         if (lastIndex === -1 || lastIndex === WORD_LENGTH) {
             currentRow[WORD_LENGTH - 1] = '';
         } else if (lastIndex > 0) {
