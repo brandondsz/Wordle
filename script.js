@@ -80,7 +80,7 @@ document.addEventListener('keydown', (e) => {
         checkGuess();
     } else if (e.key === 'Backspace') {
         const row = boardState[currentAttempt];
-        const lastIndex = row.lastIndexOf('');
+        const lastIndex = row.indexOf('');
         if (lastIndex === -1 || lastIndex === WORD_LENGTH) {
             row[WORD_LENGTH - 1] = '';
         } else {
