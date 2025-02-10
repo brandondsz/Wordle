@@ -6,6 +6,7 @@ let gameOver = false;
 
 const board = document.getElementById('board');
 const message = document.getElementById('message');
+const hiddenInput = document.getElementById('hiddenInput');
 
 // Initialize the board
 function initializeBoard() {
@@ -61,41 +62,30 @@ function colorCells(isCorrect) {
     }
 }
 
-// Reset the game
-function resetGame() {
-    boardState = Array.from({ length: MAX_ATTEMPTS }, () => Array(WORD_LENGTH).fill(''));
-    currentAttempt = 0;
-    gameOver = false;
-    message.textContent = '';
-    board.innerHTML = '';
-    initializeBoard();
-    setDailyWord(); // Reset the daily word
-}
 
-// Handle keyboard input
-document.addEventListener('keydown', (e) => {
+// Handle input from the hidden input field
+hiddenInput.addEventListener('input', (e) => {
     if (gameOver) return;
-    if (e.key === 'Enter' && boardState[currentAttempt].join('').length === WORD_LENGTH) {
+    const input = e.target.value.toUpperCase().slice(0, WORD_LENGTH);
+    hiddenInput.value = input; // Limit input to 5 characters
+    boardState[currentAttempt] = input.split('');
+    updateBoard();
+});
+
+// Handle Enter key for submission
+hiddenInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && hiddenInput.value.length === WORD_LENGTH) {
         checkGuess();
-    } else if (e.key === 'Backspace') {
-        const row = boardState[currentAttempt];
-        const lastIndex = row.indexOf('');
-        if (lastIndex === -1 || lastIndex === WORD_LENGTH) {
-            row[WORD_LENGTH - 1] = '';
-        } else {
-            row[lastIndex - 1] = '';
-        }
-        updateBoard();
-    } else if (/^[a-zA-Z]$/.test(e.key) && boardState[currentAttempt].join('').length < WORD_LENGTH) {
-        const row = boardState[currentAttempt];
-        const emptyIndex = row.indexOf('');
-        if (emptyIndex !== -1) {
-            row[emptyIndex] = e.key.toUpperCase();
-            updateBoard();
-        }
+        hiddenInput.value = '';
     }
+});
+
+// Focus on the hidden input when the board is clicked
+board.addEventListener('click', () => {
+    hiddenInput.focus();
 });
 
 
 // Initialize the game
 initializeBoard();
+hiddenInput.focus(); // Focus on the hidden input for mobile
