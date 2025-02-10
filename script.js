@@ -6,8 +6,7 @@ let gameOver = false;
 
 const board = document.getElementById('board');
 const message = document.getElementById('message');
-const hiddenInput = document.getElementById('hiddenInput');
-const currentInput = document.getElementById('currentInput');
+const keyboard = document.getElementById('keyboard');
 
 // Initialize the board
 function initializeBoard() {
@@ -63,33 +62,35 @@ function colorCells(isCorrect) {
     }
 }
 
-// Handle input from the hidden input field
-hiddenInput.addEventListener('input', (e) => {
+// Handle keyboard button clicks
+keyboard.addEventListener('click', (e) => {
     if (gameOver) return;
 
-    const input = e.target.value.toUpperCase().slice(0, WORD_LENGTH);
-    hiddenInput.value = input; // Limit input to 5 characters
-    boardState[currentAttempt] = input.split('');
-    updateBoard();
-});
+    const key = e.target.dataset.key;
+    const currentRow = boardState[currentAttempt];
 
-// Handle Backspace and Enter keys
-hiddenInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Backspace') {
+    if (key === 'Backspace') {
         // Handle backspace
-        const currentRow = boardState[currentAttempt];
-        const lastIndex = currentRow.indexOf('');
+        const lastIndex = currentRow.lastIndexOf('');
         if (lastIndex === -1 || lastIndex === WORD_LENGTH) {
             currentRow[WORD_LENGTH - 1] = '';
         } else if (lastIndex > 0) {
             currentRow[lastIndex - 1] = '';
         }
-        updateBoard();
-    } else if (e.key === 'Enter' && boardState[currentAttempt].join('').length === WORD_LENGTH) {
+    } else if (key === 'Enter') {
         // Handle Enter key
-        checkGuess();
-        hiddenInput.value = '';
+        if (currentRow.join('').length === WORD_LENGTH) {
+            checkGuess();
+        }
+    } else if (/^[A-Z]$/.test(key) && currentRow.join('').length < WORD_LENGTH) {
+        // Handle letter input
+        const emptyIndex = currentRow.indexOf('');
+        if (emptyIndex !== -1) {
+            currentRow[emptyIndex] = key;
+        }
     }
+
+    updateBoard();
 });
 
 // Focus on the hidden input when the board is clicked
