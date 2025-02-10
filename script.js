@@ -78,7 +78,7 @@ hiddenInput.addEventListener('keydown', (e) => {
     if (e.key === 'Backspace') {
         // Handle backspace
         const currentRow = boardState[currentAttempt];
-        const lastIndex = currentRow.lastIndexOf('');
+        const lastIndex = currentRow.indexOf('');
         if (lastIndex === -1 || lastIndex === WORD_LENGTH) {
             currentRow[WORD_LENGTH - 1] = '';
         } else if (lastIndex > 0) {
