@@ -6,7 +6,6 @@ let gameOver = false;
 
 const board = document.getElementById('board');
 const message = document.getElementById('message');
-const resetButton = document.getElementById('resetButton');
 
 // Initialize the board
 function initializeBoard() {
@@ -97,7 +96,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-resetButton.addEventListener('click', resetGame);
 
 // Initialize the game
 initializeBoard();
