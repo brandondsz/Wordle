@@ -7,6 +7,7 @@ let gameOver = false;
 const board = document.getElementById('board');
 const message = document.getElementById('message');
 const hiddenInput = document.getElementById('hiddenInput');
+const currentInput = document.getElementById('currentInput');
 
 // Initialize the board
 function initializeBoard() {
@@ -89,6 +90,7 @@ hiddenInput.addEventListener('keydown', (e) => {
         checkGuess();
         hiddenInput.value = '';
     }
+    currentInput.textContent = e.key;
 });
 
 // Focus on the hidden input when the board is clicked
