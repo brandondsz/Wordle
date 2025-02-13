@@ -36,9 +36,9 @@ function checkGuess() {
     if (guess === targetWord) {
         gameOver = true;
         message.textContent = 'Congratulations! You guessed the word!';
-        colorCells(true);
+        colorCells(targetWord);
     } else {
-        colorCells(false);
+        colorCells(targetWord);
         currentAttempt++;
         if (currentAttempt === MAX_ATTEMPTS) {
             gameOver = true;
@@ -48,11 +48,11 @@ function checkGuess() {
 }
 
 // Color the cells based on the guess
-function colorCells(isCorrect) {
+function colorCells(targetWord) {
     const row = board.children[currentAttempt];
     for (let i = 0; i < WORD_LENGTH; i++) {
         const cell = row.children[i];
-        if (isCorrect) {
+        if (boardState[currentAttempt][i]==targetWord[i]) {
             cell.classList.add('correct');
         } else if (targetWord.includes(boardState[currentAttempt][i])) {
             cell.classList.add('present');
