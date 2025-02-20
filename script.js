@@ -45,6 +45,7 @@ function checkGuess() {
             message.textContent = `Game over! The word was "${targetWord}".`;
         }
     }
+    updateKeyboard(guess);
 }
 
 // Color the cells based on the guess
@@ -92,6 +93,24 @@ keyboard.addEventListener('click', (e) => {
 
     updateBoard();
 });
+// Update the keyboard colors based on the guess
+function updateKeyboard(guess) {
+    for (let i = 0; i < guess.length; i++) {
+        const letter = guess[i];
+        const keyButton = document.querySelector(`#keyboard button[data-key="${letter}"]`);
+        if (!keyButton) continue;
+
+        if (targetWord[i] === letter) {
+            keyButton.classList.add('correct');
+        } else if (targetWord.includes(letter)) {
+            if (!keyButton.classList.contains('correct')) {
+                keyButton.classList.add('present');
+            }
+        } else {
+            keyButton.classList.add('absent');
+        }
+    }
+}
 
 // Focus on the hidden input when the board is clicked
 board.addEventListener('click', () => {
