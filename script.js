@@ -33,6 +33,12 @@ function updateBoard() {
 // Check the guess against the target word
 function checkGuess() {
     const guess = boardState[currentAttempt].join('');
+    if (!validWords.includes(guess.toLowerCase())) {
+        message.textContent = 'Not a valid word!';
+        shakeRow();
+        return;
+    }
+
     if (guess === targetWord) {
         gameOver = true;
         message.textContent = 'Congratulations! You guessed the word!';
@@ -61,7 +67,15 @@ function colorCells(targetWord) {
             cell.classList.add('absent');
         }
     }
-}
+    }
+
+    function shakeRow() {
+        const row = board.children[currentAttempt];
+        row.classList.add('shake');
+        row.addEventListener('animationend', () => {
+            row.classList.remove('shake');
+        }, { once: true });
+    }
 
 // Handle keyboard button clicks
 keyboard.addEventListener('click', (e) => {
